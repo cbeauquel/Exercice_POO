@@ -3,9 +3,9 @@
 class Contact
 {
     private int $id;
-    private string $name;
-    private string $email;
-    private string $phone;
+    private ?string $name;
+    private ?string $email;
+    private ?string $phone;
     
     public function setId(int $id): void
     {

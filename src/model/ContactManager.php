@@ -24,4 +24,27 @@ class ContactManager
         return $contacts;
     }
 
+    public function findById($contactId) :object
+    {
+        $contact = new Contact;
+        $contact->setId($contactId);
+        $contactStatement = $this->connection->getPDO()->prepare('SELECT * FROM contact WHERE id=:id');
+        $contactStatement->execute([
+            'id' => $contactId,
+        ]);
+
+        $row = $contactStatement->fetch();
+        if (is_Bool($row)){
+            $contact->setName(null);
+            $contact->setEmail(null);
+            $contact->setPhone(null);
+        } else {
+        $contact->setName($row['name']);
+        $contact->setEmail($row['email']);
+        $contact->setPhone($row['phone_number']);
+        }
+        return $contact;
+
+    }
+
 }
