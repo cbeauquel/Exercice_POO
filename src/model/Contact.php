@@ -53,6 +53,13 @@ class Contact
     {
         $contactId = $this->getId();
         $contactName = $this->getName();
+        echo "$contactId - $contactName\n";
+    }
+
+    public function toStringDetail(): void
+    {
+        $contactId = $this->getId();
+        $contactName = $this->getName();
         $contactEmail = $this->getEmail();
         $contactPhone = $this->getPhone();
         echo "$contactId - $contactName - $contactEmail - $contactPhone\n";

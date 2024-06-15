@@ -9,15 +9,14 @@ class ContactManager
 
     public function findAll() :array
     {
-        $contactStatement = $this->connection->getPDO()->query('SELECT * FROM contact');
+        $contactStatement = $this->connection->getPDO()->query('SELECT `id`, `name` FROM contact');
         $contacts = [];
         while($row = $contactStatement->fetch()){
             $contact = new Contact;
             $contact->setId($row['id']);
             $contact->setName($row['name']);
-            $contact->setEmail($row['email']);
-            $contact->setPhone($row['phone_number']);
-
+            $contact->setEmail(null);
+            $contact->setPhone(null);
             $contacts[] = $contact;
         }
 
@@ -47,4 +46,36 @@ class ContactManager
 
     }
 
+    public function createContact($name, $email, $phone) :string
+    {
+        try{
+        $newContactStatement = $this->connection->getPDO()->prepare('INSERT INTO `contact` (`id`, `name`, `email`, `phone_number`) VALUES (NULL, :name, :email, :phone_number)');
+        $newContactStatement->execute([
+            'name' => $name,
+            'phone_number' => $phone,
+            'email' => $email,
+        ]);
+
+        $success = $this->connection->getPDO()->LastInsertId();
+        echo "Le contact a été correctement créé sous l'ID $success, saisissez la commande \"detail $success\" pour vérifier\n";
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            }
+        return $success;
+    }
+
+    public function deleteContact($idDleleteContact) :void
+    {
+        try{
+        $delContactStatement = $this->connection->getPDO()->prepare('DELETE FROM `contact` WHERE id=:id');
+        $delContactStatement->execute([
+            'id' => $idDleleteContact,
+        ]);
+
+        echo "Le contact a été correctement supprimé\n";
+
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            }
+    }
 }

@@ -20,7 +20,22 @@ class Command
         if($contact->getName() === null){
             echo "Aucun contact avec cet identifiant, saisissez la commande \"list\" pour voir les identifiants disponibles \n";
         } else {
-            $contact->toString();
+            $contact->toStringDetail();
         }
     }
+
+    public function create($name, $email, $phone): void
+    {
+        $createRepository = new ContactManager();
+        $createRepository->connection = new DBConnect();
+        $createContact = $createRepository->createContact($name, $email, $phone);
+    }
+
+    public function delete($idDeleteContact): void
+    {
+        $deleteRepository = new ContactManager();
+        $deleteRepository->connection = new DBConnect();
+        $deleteContact = $deleteRepository->deleteContact($idDeleteContact);
+    }
+
 }
