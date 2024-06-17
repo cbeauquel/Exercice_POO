@@ -2,7 +2,7 @@
 require_once('src/model/Command.php');
 while(true){
 
-    $line = readline("Bienvenue, entrez votre commande (list, detail, create, modify, delete, help, quit) :");
+    $line = readline("Entrez votre commande (list, detail, create, modify, delete, help, quit) :");
 
     if($line === "list"){
         $contacts = new Command();
