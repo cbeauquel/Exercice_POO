@@ -64,6 +64,23 @@ class ContactManager
         return $success;
     }
 
+    public function updateContact($idUpdateContact, $name, $email, $phone) :void
+    {
+        try{
+        $updContactStatement = $this->connection->getPDO()->prepare('UPDATE `contact` SET name=:name, email=:email, phone_number=:phone_number WHERE id=:id');
+        $updContactStatement->execute([
+            'id' => $idUpdateContact,
+            'name' => $name,
+            'phone_number' => $phone,
+            'email' => $email,
+        ]);
+
+        echo "Le contact $idUpdateContact a été correctement modifié avec les données suivantes : $name, $email, $phone\n";
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            }
+    }
+
     public function deleteContact($idDleleteContact) :void
     {
         try{
