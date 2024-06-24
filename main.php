@@ -12,9 +12,9 @@ while(true){
         $contact = new Command();
         $contact->detail($line);
 
-    } elseif ($line === "create"){
+    } elseif (substr($line, 0, 6) === "create" && ctype_alpha($line) === false){
         $createContact = new Command();
-        $createContact->create();    
+        $createContact->create($line);    
 
     } elseif (substr($line, 0, 6) === "modify" && ctype_alpha($line) === false){
         $updateContact = new Command();

@@ -4,52 +4,54 @@ require_once('src/lib/DBConnect.php');
 
 class ContactManager
 {
-    public DBConnect $connection;
+    //public DBConnect $connection;
     public Contact $contact;
 
+    private $connection;
+
+    public function __construct(DBConnect $connection) {
+        $this->connection = $connection;
+    }
     public function findAll() :array
     {
-        $contactStatement = $this->connection->getPDO()->query('SELECT `id`, `name` FROM contact');
         $contacts = [];
-        while($row = $contactStatement->fetch()){
-            $contact = new Contact;
+
+        $contactStatement = $this->connection->getPDO()->query('SELECT `id`, `name` FROM contact');
+        // Récupération de tous les résultats en une seule fois
+        $rows = $contactStatement->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach($rows as $row){
+            $contact = new Contact();
             $contact->setId($row['id']);
             $contact->setName($row['name']);
-            $contact->setEmail(null);
-            $contact->setPhone(null);
             $contacts[] = $contact;
         }
 
         return $contacts;
     }
 
-    public function findById($contactId) :object
+    public function findById($contactId): ?contact
     {
-        $contact = new Contact;
-        $contact->setId($contactId);
         $contactStatement = $this->connection->getPDO()->prepare('SELECT * FROM contact WHERE id=:id');
-        $contactStatement->execute([
-            'id' => $contactId,
-        ]);
+        $contactStatement->execute(['id' => $contactId]);
 
-        $row = $contactStatement->fetch();
-        if (is_Bool($row)){
-            $contact->setName(null);
-            $contact->setEmail(null);
-            $contact->setPhone(null);
+        $row = $contactStatement->fetch(PDO::FETCH_ASSOC);
+        if ($row === false) {
+        return null; //aucun contact trouvé
         } else {
-        $contact->setName($row['name']);
-        $contact->setEmail($row['email']);
-        $contact->setPhone($row['phone_number']);
-        }
+        $contact = new Contact();
+        $contact->setId($contactId);
+        $contact->setName($row['name'] ?? null);
+        $contact->setEmail($row['email'] ?? null);
+        $contact->setPhone($row['phone_number'] ?? null);
         return $contact;
-
+        }
     }
 
     public function createContact($name, $email, $phone) :string
     {
         try{
-        $newContactStatement = $this->connection->getPDO()->prepare('INSERT INTO `contact` (`id`, `name`, `email`, `phone_number`) VALUES (NULL, :name, :email, :phone_number)');
+        $newContactStatement = $this->connection->getPDO()->prepare('INSERT INTO `contact` (`name`, `email`, `phone_number`) VALUES (:name, :email, :phone_number)');
         $newContactStatement->execute([
             'name' => $name,
             'phone_number' => $phone,

@@ -2,11 +2,12 @@
 
 class Contact
 {
+    //définition des propriétés de l'objet contact
     private int $id;
     private ?string $name;
     private ?string $email;
     private ?string $phone;
-    
+    //méthode mutateur de l'ID du contact
     public function setId(int $id): void
     {
         if(!isset($id) && $id = 0) {
@@ -17,7 +18,7 @@ class Contact
         }
         $this->id = $id;
     }
-
+    //méthode accesseur de l'ID du contact
     public function getId(): int{
       return $this->id;     
     }
@@ -48,14 +49,14 @@ class Contact
     public function getPhone(): ?string{
       return $this->phone;     
     }
-
+    //méthode pour afficher les propriétés dde l'objet contact
     public function toString(): void
     {
         $contactId = $this->getId();
         $contactName = $this->getName();
         echo "$contactId - $contactName\n";
     }
-
+    //méthode pour afficher les propriétés détaillées dde l'objet contact
     public function toStringDetail(): void
     {
         $contactId = $this->getId();
