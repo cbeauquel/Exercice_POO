@@ -81,8 +81,13 @@ class Command
         }
     }
 
-    //Méthode permettant la modification d'un contact
-    public function modify($line): void
+    /**
+     * Méthode pour modifier un contact
+     *
+     * @param string $line
+     * @return void
+     */
+    public function modify(string $line): void
     {
         //On vérifie les données saisies
         $pattern = '/modify\s+([0-9]+)$/';
@@ -163,7 +168,7 @@ class Command
                 //on informe l'utilisateur du caractère définitif de l'action et on demande la validation   
                 $delValid = readline("Cette action est irréversible, êtes-vous sûr ? (saisir \"oui\") : ");
                 if ($delValid === "oui"){
-                    $deleteContact = $deleteRepository->deleteContact($idDeleteContact);
+                    $deleteContact = $deleteRepository->deleteContact($contactId);
                 } else {
                     echo "Action annulée, aucun contact n'a été supprimé.\n";
                 }

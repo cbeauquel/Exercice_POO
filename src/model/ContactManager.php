@@ -83,12 +83,12 @@ class ContactManager
             }
     }
 
-    public function deleteContact($idDleleteContact) :void
+    public function deleteContact($idDeleteContact) :void
     {
         try{
         $delContactStatement = $this->connection->getPDO()->prepare('DELETE FROM `contact` WHERE id=:id');
         $delContactStatement->execute([
-            'id' => $idDleleteContact,
+            'id' => $idDeleteContact,
         ]);
 
         echo "Le contact a été correctement supprimé\n";
